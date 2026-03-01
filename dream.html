@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My American Dream | Private</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --dark: #0a0a0f;
+    --deep: #111118;
+    --card-bg: rgba(255,255,255,0.04);
+    --border: rgba(201,168,76,0.25);
+    --text: #e8e4d9;
+    --muted: #8a8070;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Cormorant Garamond', serif; background: var(--dark); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+  /* LOCK SCREEN */
+  /* password protection removed - lock screen hidden */
+  #lockScreen {
+    display: none !important;
+  }
+  .lock-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 80% at 80% 100%, rgba(201,168,76,0.05) 0%, transparent 60%);
+  }
+  .city-skyline { position: absolute; bottom: 0; left: 0; right: 0; height: 35%; overflow: hidden; opacity: 0.15; }
+  .city-skyline svg { width: 100%; height: 100%; }
+  .lock-content {
+    position: relative; z-index: 2; text-align: center;
+    max-width: 420px; width: 90%; padding: 3rem 2.5rem;
+    background: rgba(10,10,15,0.8); border: 1px solid var(--border); border-radius: 2px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 80px rgba(201,168,76,0.1), inset 0 1px 0 rgba(201,168,76,0.15);
+  }
+  .lock-icon { font-size: 2rem; margin-bottom: 1rem; display: block; animation: pulse 3s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:0.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.05)} }
+  .lock-title { font-family:'Bebas Neue',sans-serif; font-size:3rem; letter-spacing:0.15em; color:var(--gold); line-height:1; margin-bottom:0.5rem; }
+  .lock-subtitle { font-size:0.95rem; color:var(--muted); font-style:italic; letter-spacing:0.05em; margin-bottom:2.5rem; }
+  .lock-input {
+    width:100%; padding:1rem 1.25rem; background:rgba(255,255,255,0.03);
+    border:1px solid var(--border); border-radius:1px; color:var(--text);
+    font-family:'Cormorant Garamond',serif; font-size:1.1rem; letter-spacing:0.2em;
+    text-align:center; outline:none; transition:all 0.3s ease; margin-bottom:1rem;
+  }
+  .lock-input:focus { border-color:var(--gold); background:rgba(201,168,76,0.05); box-shadow:0 0 20px rgba(201,168,76,0.1); }
+  .lock-btn {
+    width:100%; padding:1rem; background:linear-gradient(135deg,var(--gold),#a07830);
+    border:none; border-radius:1px; color:var(--dark);
+    font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:0.3em;
+    cursor:pointer; transition:all 0.3s ease;
+  }
+  .lock-btn:hover { background:linear-gradient(135deg,var(--gold-light),var(--gold)); transform:translateY(-1px); box-shadow:0 8px 30px rgba(201,168,76,0.3); }
+  .lock-error { color:#e06060; font-size:0.85rem; margin-top:0.75rem; height:1.2rem; font-style:italic; opacity:0; transition:opacity 0.3s; }
+  .lock-error.show { opacity:1; }
+  .lock-hint { margin-top:1.5rem; font-size:0.78rem; color:var(--muted); letter-spacing:0.05em; }
+
+  /* MAIN SITE */
+  #mainSite { display:none; opacity:0; transition:opacity 1s ease; }
+
+  /* NAV */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    padding:1.5rem 3rem; display:flex; justify-content:space-between; align-items:center;
+    backdrop-filter:blur(10px); border-bottom:1px solid rgba(201,168,76,0.08);
+    background:rgba(10,10,15,0.5);
+  }
+  .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:0.2em; color:var(--gold); }
+  .nav-links { display:flex; gap:2.5rem; list-style:none; }
+  .nav-links a { color:var(--muted); text-decoration:none; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; transition:color 0.3s; }
+  .nav-links a:hover { color:var(--gold); }
+  .nav-lock { background:none; border:1px solid var(--border); color:var(--muted); font-family:'Cormorant Garamond',serif; font-size:0.8rem; letter-spacing:0.1em; padding:0.5rem 1.2rem; cursor:pointer; transition:all 0.3s; }
+  .nav-lock:hover { border-color:var(--gold); color:var(--gold); }
+
+  /* HERO */
+  .hero { position:relative; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; }
+  .hero-bg {
+    position:absolute; inset:0;
+    background: linear-gradient(to bottom,transparent 0%,var(--dark) 100%),
+                radial-gradient(ellipse 120% 80% at 50% 20%,rgba(201,168,76,0.12) 0%,transparent 60%);
+  }
+  .skyline-hero { position:absolute; bottom:0; left:0; right:0; height:55%; opacity:0.18; }
+  .stars {
+    position:absolute; inset:0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%,rgba(255,255,255,0.8) 0%,transparent 100%),
+      radial-gradient(1px 1px at 50% 10%,rgba(255,255,255,0.6) 0%,transparent 100%),
+      radial-gradient(1.5px 1.5px at 70% 20%,rgba(255,255,255,0.7) 0%,transparent 100%),
+      radial-gradient(1px 1px at 85% 35%,rgba(255,255,255,0.5) 0%,transparent 100%),
+      radial-gradient(1px 1px at 10% 60%,rgba(255,255,255,0.4) 0%,transparent 100%),
+      radial-gradient(1px 1px at 30% 80%,rgba(255,255,255,0.3) 0%,transparent 100%),
+      radial-gradient(1.5px 1.5px at 60% 75%,rgba(255,255,255,0.5) 0%,transparent 100%),
+      radial-gradient(1px 1px at 90% 55%,rgba(255,255,255,0.4) 0%,transparent 100%);
+    animation:twinkle 4s ease-in-out infinite alternate;
+  }
+  @keyframes twinkle { from{opacity:0.6} to{opacity:1} }
+  .hero-content { position:relative; z-index:2; text-align:center; }
+  .hero-eyebrow { font-size:0.8rem; letter-spacing:0.4em; color:var(--gold); text-transform:uppercase; margin-bottom:1.5rem; opacity:0; animation:slideUp 1s ease 0.5s forwards; }
+  .hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(4rem,12vw,10rem); letter-spacing:0.08em; line-height:0.9; color:#fff; opacity:0; animation:slideUp 1s ease 0.7s forwards; }
+  .hero-title span { color:var(--gold); display:block; }
+  .hero-subtitle { font-size:1.2rem; font-style:italic; color:var(--muted); margin-top:1.5rem; letter-spacing:0.05em; opacity:0; animation:slideUp 1s ease 0.9s forwards; }
+  .scroll-hint { position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:0.5rem; opacity:0; animation:fadeIn 1s ease 1.5s forwards; }
+  .scroll-hint span { font-size:0.7rem; letter-spacing:0.3em; color:var(--muted); text-transform:uppercase; }
+  .scroll-line { width:1px; height:50px; background:linear-gradient(to bottom,var(--gold),transparent); animation:scrollAnim 2s ease-in-out infinite; }
+  @keyframes scrollAnim { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform:scaleY(1);transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+  @keyframes slideUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  /* SECTIONS */
+  section { padding:8rem 2rem; max-width:1200px; margin:0 auto; }
+  .section-label { font-size:0.7rem; letter-spacing:0.4em; color:var(--gold); text-transform:uppercase; margin-bottom:1rem; display:flex; align-items:center; gap:1rem; }
+  .section-label::before { content:''; width:40px; height:1px; background:var(--gold); }
+  .section-title { font-family:'Playfair Display',serif; font-size:clamp(2.5rem,5vw,4rem); line-height:1.1; margin-bottom:3rem; color:#fff; }
+  .section-title em { color:var(--gold); font-style:italic; }
+
+  /* MY STORY BANNER */
+  .story-banner {
+    background: var(--deep); border:1px solid var(--border);
+    padding:4rem; position:relative; overflow:hidden; margin-bottom:3rem;
+  }
+  .story-banner::before {
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(ellipse 80% 60% at 30% 50%,rgba(201,168,76,0.06) 0%,transparent 70%);
+  }
+  .story-banner-inner { position:relative; z-index:1; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+  .story-text h2 { font-family:'Playfair Display',serif; font-size:2.5rem; color:#fff; margin-bottom:1.5rem; }
+  .story-text h2 em { color:var(--gold); }
+  .story-text p { font-size:1.1rem; line-height:2; color:var(--muted); font-style:italic; margin-bottom:1rem; }
+  .story-stats { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  .stat-box { border:1px solid var(--border); padding:1.5rem; text-align:center; background:var(--card-bg); }
+  .stat-num { font-family:'Bebas Neue',sans-serif; font-size:3rem; color:var(--gold); display:block; }
+  .stat-label { font-size:0.7rem; letter-spacing:0.2em; color:var(--muted); text-transform:uppercase; }
+
+  /* DREAM CARDS */
+  .cards-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.5rem; }
+  .dream-card { background:var(--card-bg); border:1px solid var(--border); border-radius:2px; overflow:hidden; transition:all 0.4s ease; cursor:pointer; }
+  .dream-card:hover { border-color:rgba(201,168,76,0.5); transform:translateY(-4px); box-shadow:0 20px 60px rgba(0,0,0,0.4),0 0 30px rgba(201,168,76,0.08); }
+  .card-img { height:220px; position:relative; overflow:hidden; }
+  .card-img.nyc { background:linear-gradient(160deg,#1a1a2e 0%,#16213e 40%,#0f3460 100%); }
+  .card-img.la { background:linear-gradient(160deg,#2d1b00 0%,#5c3317 40%,#c98a3a 100%); }
+  .card-img.chicago { background:linear-gradient(160deg,#0d1b2a 0%,#1b2838 50%,#2c4a6e 100%); }
+  .card-img.texas { background:linear-gradient(160deg,#1a0800 0%,#3d1500 50%,#8b3a00 100%); }
+  .card-img.miami { background:linear-gradient(160deg,#001a2e 0%,#003366 50%,#0066cc 100%); }
+  .card-img.sf { background:linear-gradient(160deg,#1a0a2e 0%,#2d1b4e 40%,#6b3fa0 100%); }
+  .card-img-overlay { position:absolute; inset:0; display:flex; align-items:flex-end; padding:1.5rem; background:linear-gradient(to top,rgba(10,10,15,0.9) 0%,transparent 60%); }
+  .city-label { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:0.1em; color:var(--gold); opacity:0.9; }
+  .card-img svg { position:absolute; bottom:0; left:0; right:0; width:100%; height:80%; opacity:0.25; }
+  .card-body { padding:1.5rem; }
+  .card-tag { font-size:0.65rem; letter-spacing:0.25em; color:var(--gold); text-transform:uppercase; margin-bottom:0.75rem; }
+  .card-title { font-family:'Playfair Display',serif; font-size:1.3rem; margin-bottom:0.75rem; color:#fff; }
+  .card-text { font-size:0.95rem; line-height:1.7; color:var(--muted); font-style:italic; }
+  .card-date { margin-top:1rem; font-size:0.7rem; letter-spacing:0.15em; color:rgba(138,128,112,0.5); border-top:1px solid var(--border); padding-top:0.75rem; }
+
+  /* DREAM ARTWORK */
+  .artwork-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+  .artwork-piece { position:relative; overflow:hidden; border:1px solid var(--border); aspect-ratio:1; cursor:pointer; transition:all 0.4s; }
+  .artwork-piece:first-child { grid-column:span 2; aspect-ratio:2/1; }
+  .artwork-piece:hover { border-color:rgba(201,168,76,0.6); transform:scale(1.01); z-index:5; }
+  .artwork-piece:hover .artwork-overlay { opacity:1; }
+  .art-bg { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+  .art-1 { background:radial-gradient(ellipse at 30% 40%,#1a3a6e,#0a0a1e); }
+  .art-2 { background:radial-gradient(ellipse at 70% 60%,#4a2800,#1a0800); }
+  .art-3 { background:radial-gradient(ellipse at 50% 30%,#1a4a1a,#0a150a); }
+  .art-4 { background:radial-gradient(ellipse at 40% 50%,#3a1a5c,#0a0520); }
+  .art-5 { background:radial-gradient(ellipse at 60% 40%,#1a3a4a,#050f15); }
+  .art-scene { position:absolute; inset:0; display:flex; align-items:flex-end; justify-content:center; overflow:hidden; }
+  .artwork-overlay { position:absolute; inset:0; background:rgba(10,10,15,0.7); display:flex; flex-direction:column; align-items:center; justify-content:center; opacity:0; transition:opacity 0.3s; padding:1.5rem; text-align:center; }
+  .artwork-overlay h3 { font-family:'Playfair Display',serif; font-size:1.2rem; color:#fff; margin-bottom:0.5rem; }
+  .artwork-overlay p { font-size:0.85rem; color:var(--muted); font-style:italic; }
+  .art-label { position:absolute; bottom:1rem; left:1rem; font-size:0.65rem; letter-spacing:0.2em; color:var(--gold); text-transform:uppercase; }
+
+  /* LUCID DREAMS */
+  .lucid-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; }
+  .lucid-card { border:1px solid var(--border); padding:2.5rem; background:var(--card-bg); position:relative; overflow:hidden; transition:all 0.3s; }
+  .lucid-card:hover { border-color:rgba(201,168,76,0.5); background:rgba(201,168,76,0.03); }
+  .lucid-card::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:linear-gradient(to bottom,var(--gold),transparent); }
+  .lucid-num { font-family:'Bebas Neue',sans-serif; font-size:4rem; color:rgba(201,168,76,0.15); position:absolute; top:1rem; right:1.5rem; line-height:1; }
+  .lucid-type { font-size:0.65rem; letter-spacing:0.3em; color:var(--gold); text-transform:uppercase; margin-bottom:0.75rem; }
+  .lucid-title { font-family:'Playfair Display',serif; font-size:1.4rem; color:#fff; margin-bottom:1rem; }
+  .lucid-body { font-size:0.95rem; line-height:1.8; color:var(--muted); font-style:italic; }
+  .lucid-meta { margin-top:1.5rem; display:flex; gap:1.5rem; }
+  .lucid-tag { font-size:0.65rem; letter-spacing:0.15em; color:rgba(201,168,76,0.6); border:1px solid rgba(201,168,76,0.2); padding:0.25rem 0.75rem; text-transform:uppercase; }
+
+  /* JOURNAL */
+  .journal-layout { display:grid; grid-template-columns:1fr 2fr; gap:4rem; align-items:start; }
+  .journal-sidebar { position:sticky; top:8rem; }
+  .journal-meta { margin-top:2rem; display:flex; flex-direction:column; gap:1.5rem; }
+  .meta-item { display:flex; flex-direction:column; gap:0.3rem; }
+  .meta-label { font-size:0.65rem; letter-spacing:0.3em; color:var(--gold); text-transform:uppercase; }
+  .meta-value { font-size:1rem; color:var(--text); font-style:italic; }
+  .journal-entries { display:flex; flex-direction:column; gap:3rem; }
+  .journal-entry { border-left:1px solid var(--border); padding-left:2rem; position:relative; transition:border-color 0.3s; }
+  .journal-entry:hover { border-color:var(--gold); }
+  .journal-entry::before { content:''; position:absolute; left:-5px; top:0.5rem; width:9px; height:9px; border-radius:50%; background:var(--dark); border:1px solid var(--gold); transition:background 0.3s; }
+  .journal-entry:hover::before { background:var(--gold); }
+  .entry-date { font-size:0.7rem; letter-spacing:0.25em; color:var(--gold); text-transform:uppercase; margin-bottom:0.75rem; }
+  .entry-title { font-family:'Playfair Display',serif; font-size:1.5rem; color:#fff; margin-bottom:0.75rem; }
+  .entry-body { font-size:1rem; line-height:1.9; color:var(--muted); font-style:italic; }
+
+  /* SYMBOLS */
+  .symbols-bg { background:var(--deep); border:1px solid var(--border); padding:4rem 3rem; position:relative; overflow:hidden; }
+  .symbols-bg::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(201,168,76,0.04) 0%,transparent 70%); }
+  .symbols-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:2rem; position:relative; z-index:1; }
+  .symbol-item { text-align:center; padding:2rem 1rem; border:1px solid var(--border); background:var(--card-bg); transition:all 0.3s ease; }
+  .symbol-item:hover { border-color:rgba(201,168,76,0.5); background:rgba(201,168,76,0.04); transform:translateY(-3px); }
+  .symbol-icon { font-size:2.5rem; margin-bottom:1rem; display:block; }
+  .symbol-name { font-family:'Playfair Display',serif; font-size:1rem; color:#fff; margin-bottom:0.5rem; }
+  .symbol-meaning { font-size:0.85rem; color:var(--muted); font-style:italic; line-height:1.5; }
+
+  /* VISION BOARD */
+  .vision-mosaic { display:grid; grid-template-columns:repeat(12,1fr); grid-template-rows:repeat(3,180px); gap:1rem; }
+  .vision-block { border-radius:2px; position:relative; overflow:hidden; border:1px solid var(--border); transition:all 0.4s; }
+  .vision-block:hover { border-color:rgba(201,168,76,0.5); transform:scale(1.01); z-index:10; }
+  .vision-block:nth-child(1){grid-column:1/6;grid-row:1/3}
+  .vision-block:nth-child(2){grid-column:6/9;grid-row:1/2}
+  .vision-block:nth-child(3){grid-column:9/13;grid-row:1/2}
+  .vision-block:nth-child(4){grid-column:6/10;grid-row:2/3}
+  .vision-block:nth-child(5){grid-column:10/13;grid-row:2/3}
+  .vision-block:nth-child(6){grid-column:1/5;grid-row:3/4}
+  .vision-block:nth-child(7){grid-column:5/9;grid-row:3/4}
+  .vision-block:nth-child(8){grid-column:9/13;grid-row:3/4}
+  .vision-bg { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:4rem; }
+  .vision-caption { position:absolute; bottom:0; left:0; right:0; padding:1rem; background:linear-gradient(to top,rgba(10,10,15,0.95) 0%,transparent 100%); font-size:0.8rem; color:var(--text); letter-spacing:0.05em; }
+  .vision-caption strong { display:block; font-family:'Playfair Display',serif; font-size:0.95rem; color:var(--gold); }
+  .vb-1{background:linear-gradient(135deg,#0a1628,#1a3a6e)}
+  .vb-2{background:linear-gradient(135deg,#1a1000,#4a3000)}
+  .vb-3{background:linear-gradient(135deg,#0d1f0d,#1a4a2e)}
+  .vb-4{background:linear-gradient(135deg,#1f0a0a,#5c1a1a)}
+  .vb-5{background:linear-gradient(135deg,#0a0a28,#2a1a5c)}
+  .vb-6{background:linear-gradient(135deg,#141414,#2a2a2a)}
+  .vb-7{background:linear-gradient(135deg,#1a1220,#3a2a50)}
+  .vb-8{background:linear-gradient(135deg,#0a1a1a,#1a4a4a)}
+
+  /* GOALS CHECKLIST */
+  .goals-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  .goal-item { display:flex; align-items:flex-start; gap:1.25rem; padding:1.5rem; border:1px solid var(--border); background:var(--card-bg); cursor:pointer; transition:all 0.3s; }
+  .goal-item:hover { border-color:rgba(201,168,76,0.4); }
+  .goal-item.done { border-color:rgba(201,168,76,0.6); background:rgba(201,168,76,0.05); }
+  .goal-check { width:22px; height:22px; border:1px solid var(--border); border-radius:50%; flex-shrink:0; margin-top:3px; display:flex; align-items:center; justify-content:center; transition:all 0.3s; }
+  .goal-item.done .goal-check { background:var(--gold); border-color:var(--gold); }
+  .goal-check::after { content:'✓'; font-size:0.75rem; color:var(--dark); opacity:0; transition:opacity 0.3s; }
+  .goal-item.done .goal-check::after { opacity:1; }
+  .goal-text h4 { font-family:'Playfair Display',serif; font-size:1.05rem; color:#fff; margin-bottom:0.35rem; }
+  .goal-text p { font-size:0.85rem; color:var(--muted); font-style:italic; line-height:1.5; }
+  .goal-item.done .goal-text h4 { color:var(--gold); }
+
+  /* COUNTDOWN */
+  .countdown-wrap { text-align:center; padding:5rem 2rem; background:var(--deep); border:1px solid var(--border); position:relative; overflow:hidden; }
+  .countdown-wrap::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(201,168,76,0.07) 0%,transparent 70%); }
+  .countdown-title { font-family:'Playfair Display',serif; font-size:1.2rem; font-style:italic; color:var(--muted); margin-bottom:3rem; position:relative; z-index:1; }
+  .countdown-boxes { display:flex; justify-content:center; gap:2rem; position:relative; z-index:1; flex-wrap:wrap; }
+  .countdown-box { display:flex; flex-direction:column; align-items:center; gap:0.5rem; }
+  .countdown-num { font-family:'Bebas Neue',sans-serif; font-size:5rem; color:var(--gold); line-height:1; min-width:90px; text-align:center; }
+  .countdown-label { font-size:0.65rem; letter-spacing:0.3em; color:var(--muted); text-transform:uppercase; }
+  .countdown-sep { font-family:'Bebas Neue',sans-serif; font-size:4rem; color:rgba(201,168,76,0.3); align-self:flex-start; margin-top:0.5rem; }
+  .countdown-sub { margin-top:2rem; font-size:0.85rem; color:var(--muted); font-style:italic; position:relative; z-index:1; }
+  .countdown-input-wrap { margin-top:2rem; display:flex; justify-content:center; gap:1rem; align-items:center; position:relative; z-index:1; flex-wrap:wrap; }
+  .countdown-input-wrap label { font-size:0.75rem; letter-spacing:0.2em; color:var(--gold); text-transform:uppercase; }
+  .countdown-date-input { padding:0.5rem 1rem; background:rgba(255,255,255,0.03); border:1px solid var(--border); color:var(--text); font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none; }
+  .countdown-date-input:focus { border-color:var(--gold); }
+  .set-date-btn { padding:0.5rem 1.5rem; background:var(--gold); border:none; color:var(--dark); font-family:'Bebas Neue',sans-serif; letter-spacing:0.2em; cursor:pointer; transition:all 0.3s; }
+  .set-date-btn:hover { opacity:0.85; }
+
+  /* ADD ENTRY */
+  .add-btn { display:inline-flex; align-items:center; gap:0.75rem; padding:0.9rem 2rem; border:1px solid var(--gold); background:transparent; color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:1rem; letter-spacing:0.1em; cursor:pointer; transition:all 0.3s; margin-top:2rem; font-style:italic; }
+  .add-btn:hover { background:rgba(201,168,76,0.08); transform:translateY(-1px); }
+
+  /* MODAL */
+  .modal-overlay { display:none; position:fixed; inset:0; z-index:500; background:rgba(10,10,15,0.9); backdrop-filter:blur(10px); align-items:center; justify-content:center; }
+  .modal-overlay.open { display:flex; animation:fadeIn 0.3s ease; }
+  .modal { background:var(--deep); border:1px solid var(--border); padding:3rem; max-width:600px; width:90%; box-shadow:0 40px 100px rgba(0,0,0,0.7); }
+  .modal-title { font-family:'Playfair Display',serif; font-size:2rem; color:#fff; margin-bottom:1.5rem; }
+  .modal-field { margin-bottom:1.25rem; }
+  .modal-label { display:block; font-size:0.7rem; letter-spacing:0.25em; color:var(--gold); text-transform:uppercase; margin-bottom:0.5rem; }
+  .modal-input,.modal-textarea { width:100%; padding:0.875rem 1rem; background:rgba(255,255,255,0.03); border:1px solid var(--border); color:var(--text); font-family:'Cormorant Garamond',serif; font-size:1rem; outline:none; transition:border-color 0.3s; }
+  .modal-textarea { min-height:120px; resize:vertical; }
+  .modal-input:focus,.modal-textarea:focus { border-color:var(--gold); }
+  .modal-actions { display:flex; gap:1rem; margin-top:2rem; justify-content:flex-end; }
+  .btn-cancel { padding:0.75rem 1.5rem; background:none; border:1px solid var(--border); color:var(--muted); font-family:'Cormorant Garamond',serif; cursor:pointer; font-size:0.95rem; }
+  .btn-save { padding:0.75rem 2rem; background:linear-gradient(135deg,var(--gold),#a07830); border:none; color:var(--dark); font-family:'Bebas Neue',sans-serif; letter-spacing:0.2em; font-size:0.95rem; cursor:pointer; }
+  .btn-save:hover { opacity:0.9; transform:translateY(-1px); }
+
+  /* FOOTER */
+  footer { border-top:1px solid var(--border); padding:3rem 2rem; text-align:center; }
+  .footer-title { font-family:'Bebas Neue',sans-serif; font-size:2.5rem; letter-spacing:0.2em; color:var(--gold); margin-bottom:0.5rem; }
+  .footer-sub { font-size:0.85rem; color:var(--muted); font-style:italic; letter-spacing:0.1em; }
+  .footer-lock { margin-top:2rem; font-size:0.7rem; letter-spacing:0.2em; color:rgba(138,128,112,0.4); text-transform:uppercase; }
+  .gold-divider { width:60px; height:1px; background:linear-gradient(to right,transparent,var(--gold),transparent); margin:0 auto 4rem; }
+
+  /* NOTIFICATION */
+  .notif { position:fixed; bottom:2rem; right:2rem; background:var(--deep); border:1px solid var(--gold); padding:1rem 1.5rem; font-size:0.9rem; color:var(--gold); font-style:italic; transform:translateY(100px); opacity:0; transition:all 0.4s ease; z-index:200; }
+  .notif.show { transform:translateY(0); opacity:1; }
+
+  @media(max-width:768px){
+    .journal-layout,.lucid-grid,.goals-grid,.story-banner-inner,.artwork-grid{grid-template-columns:1fr}
+    .artwork-piece:first-child{grid-column:span 1;aspect-ratio:1}
+    nav{padding:1rem 1.5rem} .nav-links{display:none}
+    .vision-mosaic{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+    .vision-block{grid-column:auto!important;grid-row:auto!important;height:160px}
+    .countdown-num{font-size:3.5rem}
+  }
+</style>
+</head>
+<body>
+<h1 style="color: var(--gold); text-align:center; margin-top:1rem;">ANISH&gt;T</h1>
+
+
+<div class="notif" id="notif">✦ Saved to your private journal</div>
+
+<!-- MAIN SITE -->
+<div id="mainSite">
+
+  <nav>
+    <div class="nav-logo">MY AMERICA ✦</div>
+    <ul class="nav-links">
+      <li><a href="#story">My Story</a></li>
+      <li><a href="#dreams">Dreams</a></li>
+      <li><a href="#artwork">Artwork</a></li>
+      <li><a href="#lucid">Lucid Notes</a></li>
+      <li><a href="#journal">Journal</a></li>
+      <li><a href="#symbols">Symbols</a></li>
+      <li><a href="#goals">Goals</a></li>
+      <li><a href="#countdown">Countdown</a></li>
+    </ul>
+    <button class="nav-lock" onclick="lockSite()">🔒 Lock</button>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="stars"></div>
+    <div class="skyline-hero">
+      <svg viewBox="0 0 1400 400" preserveAspectRatio="xMidYMax slice" fill="url(#grad1)" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(201,168,76,0.8)"/>
+            <stop offset="100%" style="stop-color:rgba(201,168,76,0.2)"/>
+          </linearGradient>
+        </defs>
+        <rect x="0" y="220" width="1400" height="180"/>
+        <rect x="30" y="190" width="45" height="210"/><rect x="85" y="155" width="65" height="245"/>
+        <rect x="160" y="175" width="35" height="225"/><rect x="205" y="130" width="55" height="270"/>
+        <rect x="217" y="105" width="17" height="295"/><rect x="270" y="165" width="42" height="235"/>
+        <rect x="322" y="140" width="75" height="260"/><rect x="408" y="195" width="38" height="205"/>
+        <rect x="455" y="150" width="58" height="250"/><rect x="523" y="105" width="85" height="295"/>
+        <rect x="557" y="75" width="14" height="325"/><rect x="618" y="170" width="48" height="230"/>
+        <rect x="676" y="120" width="62" height="280"/><rect x="748" y="155" width="52" height="245"/>
+        <rect x="810" y="110" width="68" height="290"/><rect x="888" y="145" width="42" height="255"/>
+        <rect x="940" y="175" width="58" height="225"/><rect x="1008" y="130" width="72" height="270"/>
+        <rect x="1090" y="158" width="47" height="242"/><rect x="1147" y="118" width="63" height="282"/>
+        <rect x="1220" y="150" width="37" height="250"/><rect x="1267" y="178" width="52" height="222"/>
+        <rect x="1329" y="135" width="68" height="265"/>
+        <rect x="523" y="85" width="85" height="20"/><rect x="553" y="65" width="25" height="40"/>
+      </svg>
+    </div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">✦ My Private Dream World ✦</div>
+      <div class="hero-title">BOUND<span>FOR USA</span></div>
+      <div class="hero-subtitle">Every dream written here is a step closer to reality</div>
+    </div>
+    <div class="scroll-hint">
+      <span>Explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+
+  <!-- MY STORY -->
+  <section id="story">
+    <div class="section-label">My Story</div>
+    <div class="section-title">Who I am & <em>where I'm going</em></div>
+    <div class="story-banner">
+      <div class="story-banner-inner">
+        <div class="story-text">
+          <h2>My name is <em>written in the stars</em> above America</h2>
+          <p>I was born with a dream too big for borders. From the moment I first saw those gleaming skyscrapers in photos, those wide open highways stretching to the horizon — I knew. America was calling my name.</p>
+          <p>This is my private sanctuary. Every thought I record here, every dream I trace, every goal I set — it is all fuel for the journey ahead. I am not just dreaming of America. I am preparing for it. Every single day.</p>
+          <p>One day I will stand on American soil and look back at this page and smile. Because it all started right here.</p>
+        </div>
+        <div class="story-stats">
+          <div class="stat-box">
+            <span class="stat-num" id="dreamCountStat">6</span>
+            <span class="stat-label">Dreams Recorded</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num">1</span>
+            <span class="stat-label">Destination</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num">🇺🇸</span>
+            <span class="stat-label">America</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num">∞</span>
+            <span class="stat-label">Determination</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DREAM CITIES -->
+  <section id="dreams">
+    <div class="section-label">Dream Visions</div>
+    <div class="section-title">Cities I'll <em>walk through</em></div>
+    <div class="cards-grid">
+      <div class="dream-card">
+        <div class="card-img nyc">
+          <svg viewBox="0 0 300 200" fill="rgba(255,255,255,0.15)">
+            <rect x="10" y="80" width="20" height="120"/><rect x="40" y="60" width="30" height="140"/>
+            <rect x="80" y="40" width="40" height="160"/><rect x="92" y="25" width="8" height="175"/>
+            <rect x="130" y="55" width="25" height="145"/><rect x="165" y="70" width="35" height="130"/>
+            <rect x="210" y="50" width="30" height="150"/><rect x="250" y="75" width="40" height="125"/>
+          </svg>
+          <div class="card-img-overlay"><div class="city-label">NEW YORK</div></div>
+        </div>
+        <div class="card-body">
+          <div class="card-tag">✦ Dream #001</div>
+          <div class="card-title">Walking Times Square at midnight</div>
+          <div class="card-text">The neon lights reflecting off wet pavement, yellow cabs rushing past, the whole city humming — I am there. I belong there. This is my street.</div>
+          <div class="card-date">DREAMED: Often · STATUS: In Progress</div>
+        </div>
+      </div>
+      <div class="dream-card">
+        <div class="card-img la">
+          <svg viewBox="0 0 300 200" fill="rgba(255,255,255,0.12)">
+            <rect x="20" y="90" width="25" height="110"/><rect x="55" y="70" width="35" height="130"/>
+            <rect x="100" y="100" width="20" height="100"/><rect x="130" y="60" width="40" height="140"/>
+            <rect x="180" y="85" width="30" height="115"/><rect x="220" y="75" width="45" height="125"/>
+            <ellipse cx="80" cy="40" rx="15" ry="25" opacity="0.5"/><rect x="78" y="60" width="4" height="60"/>
+          </svg>
+          <div class="card-img-overlay"><div class="city-label">LOS ANGELES</div></div>
+        </div>
+        <div class="card-body">
+          <div class="card-tag">✦ Dream #002</div>
+          <div class="card-title">Watching sunset from Griffith Observatory</div>
+          <div class="card-text">The Hollywood sign below me, the Pacific glittering in the distance. I am standing there. The whole city laid out like my future — golden and limitless.</div>
+          <div class="card-date">DREAMED: Often · STATUS: Visualized</div>
+        </div>
+      </div>
+      <div class="dream-card">
+        <div class="card-img chicago">
+          <svg viewBox="0 0 300 200" fill="rgba(255,255,255,0.13)">
+            <rect x="15" y="60" width="30" height="140"/><rect x="55" y="40" width="45" height="160"/>
+            <rect x="110" y="25" width="50" height="175"/><rect x="170" y="50" width="35" height="150"/>
+            <rect x="215" y="70" width="40" height="130"/><rect x="265" y="55" width="30" height="145"/>
+          </svg>
+          <div class="card-img-overlay"><div class="city-label">CHICAGO</div></div>
+        </div>
+        <div class="card-body">
+          <div class="card-tag">✦ Dream #003</div>
+          <div class="card-title">Standing under the Cloud Gate</div>
+          <div class="card-text">My face reflected a thousand times in the Bean — every reflection a version of me that made it. I am there. I am smiling. I belong to this city.</div>
+          <div class="card-date">DREAMED: Twice · STATUS: Planned</div>
+        </div>
+      </div>
+      <div class="dream-card">
+        <div class="card-img miami">
+          <svg viewBox="0 0 300 200" fill="rgba(255,255,255,0.12)">
+            <rect x="10" y="90" width="25" height="110"/><rect x="45" y="70" width="30" height="130"/>
+            <rect x="85" y="55" width="40" height="145"/><rect x="135" y="75" width="25" height="125"/>
+            <rect x="170" y="60" width="45" height="140"/><rect x="225" y="80" width="35" height="120"/>
+            <ellipse cx="260" cy="50" rx="20" ry="30" opacity="0.4"/><rect x="258" y="75" width="4" height="60"/>
+          </svg>
+          <div class="card-img-overlay"><div class="city-label">MIAMI</div></div>
+        </div>
+        <div class="card-body">
+          <div class="card-tag">✦ Dream #004</div>
+          <div class="card-title">South Beach sunrise walk</div>
+          <div class="card-text">The warm Atlantic breeze, white sand under my feet, the Art Deco buildings glowing pink in the morning light. I am walking these streets. I am free.</div>
+          <div class="card-date">DREAMED: Once · STATUS: Planned</div>
+        </div>
+      </div>
+      <div class="dream-card">
+        <div class="card-img texas">
+          <svg viewBox="0 0 300 200" fill="rgba(255,255,255,0.11)">
+            <rect x="10" y="100" width="35" height="100"/><rect x="55" y="80" width="40" height="120"/>
+            <rect x="105" y="65" width="30" height="135"/><rect x="145" y="90" width="45" height="110"/>
+            <rect x="200" y="75" width="35" height="125"/><rect x="245" y="95" width="40" height="105"/>
+          </svg>
+          <div class="card-img-overlay"><div class="city-label">TEXAS</div></div>
+        </div>
+        <div class="card-body">
+          <div class="card-tag">✦ Dream #005</div>
+          <div class="card-title">Open road through the Lone Star State</div>
+          <div class="card-text">The endless Texas highway, windows down, country music on the radio, the horizon stretching forever. Just me and the American open road.</div>
+          <div class="card-date">DREAMED: Once · STATUS: On the list</div>
+        </div>
+      </div>
+      <div class="dream-card">
+        <div class="card-img sf">
+          <svg viewBox="0 0 300 200" fill="rgba(255,255,255,0.12)">
+            <rect x="15" y="85" width="25" height="115"/><rect x="50" y="65" width="35" height="135"/>
+            <rect x="95" y="50" width="45" height="150"/><rect x="150" y="70" width="30" height="130"/>
+            <rect x="190" y="55" width="40" height="145"/><rect x="240" y="80" width="35" height="120"/>
+            <!-- Golden Gate cables suggestion -->
+            <line x1="0" y1="60" x2="150" y2="40" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+            <line x1="150" y1="40" x2="300" y2="60" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+          </svg>
+          <div class="card-img-overlay"><div class="city-label">SAN FRANCISCO</div></div>
+        </div>
+        <div class="card-body">
+          <div class="card-tag">✦ Dream #006</div>
+          <div class="card-title">Crossing the Golden Gate Bridge</div>
+          <div class="card-text">The fog rolling in from the Pacific, the red towers disappearing into the clouds above me. I am walking this bridge. Every step is proof I made it.</div>
+          <div class="card-date">DREAMED: Many times · STATUS: Dreaming</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DREAM ARTWORK -->
+  <section id="artwork">
+    <div class="section-label">Dream Artwork</div>
+    <div class="section-title">Me <em>already there</em> — in my mind's eye</div>
+    <div class="artwork-grid">
+      <div class="artwork-piece">
+        <div class="art-bg art-1">
+          <div class="art-scene">
+            <svg viewBox="0 0 700 300" width="100%" fill="rgba(201,168,76,0.2)">
+              <rect x="0" y="150" width="700" height="150"/>
+              <rect x="50" y="80" width="40" height="170"/><rect x="100" y="50" width="60" height="200"/>
+              <rect x="170" y="70" width="30" height="180"/><rect x="210" y="30" width="55" height="220"/>
+              <rect x="222" y="10" width="16" height="240"/>
+              <rect x="280" y="60" width="45" height="190"/><rect x="335" y="40" width="70" height="210"/>
+              <rect x="415" y="80" width="35" height="170"/><rect x="460" y="55" width="55" height="195"/>
+              <rect x="525" y="20" width="80" height="230"/><rect x="560" y="0" width="14" height="250"/>
+              <rect x="615" y="65" width="45" height="185"/>
+              <!-- Person silhouette -->
+              <ellipse cx="350" cy="125" rx="12" ry="14" fill="rgba(232,201,122,0.7)"/>
+              <rect x="343" y="139" width="14" height="25" fill="rgba(232,201,122,0.5)"/>
+              <rect x="337" y="142" width="10" height="3" fill="rgba(232,201,122,0.5)" transform="rotate(-20,342,143)"/>
+              <rect x="353" y="142" width="10" height="3" fill="rgba(232,201,122,0.5)" transform="rotate(20,353,143)"/>
+            </svg>
+          </div>
+        </div>
+        <div class="artwork-overlay">
+          <h3>Me in New York City</h3>
+          <p>Standing small beneath the giants of Manhattan — but feeling ten feet tall inside. This is where I will be.</p>
+        </div>
+        <div class="art-label">NYC · My Vision</div>
+      </div>
+      <div class="artwork-piece">
+        <div class="art-bg art-2">
+          <div class="art-scene">
+            <svg viewBox="0 0 300 300" width="100%" fill="rgba(201,168,76,0.2)">
+              <rect x="0" y="200" width="300" height="100"/>
+              <ellipse cx="230" cy="80" rx="60" ry="60" fill="rgba(200,120,30,0.4)"/>
+              <ellipse cx="230" cy="80" rx="40" ry="40" fill="rgba(220,140,40,0.3)"/>
+              <rect x="20" y="150" width="15" height="50"/><ellipse cx="27" cy="130" rx="18" ry="30" fill="rgba(30,80,30,0.5)"/>
+              <rect x="70" y="160" width="12" height="40"/><ellipse cx="76" cy="142" rx="15" ry="25" fill="rgba(30,80,30,0.5)"/>
+              <!-- Person silhouette watching sunset -->
+              <ellipse cx="150" cy="175" rx="10" ry="12" fill="rgba(232,201,122,0.8)"/>
+              <rect x="143" y="187" width="12" height="20" fill="rgba(232,201,122,0.6)"/>
+            </svg>
+          </div>
+        </div>
+        <div class="artwork-overlay">
+          <h3>LA Sunset from Griffith</h3>
+          <p>Watching the sun melt into the Pacific, the Hollywood sign behind me, the city of angels below.</p>
+        </div>
+        <div class="art-label">Los Angeles · Sunset Vision</div>
+      </div>
+      <div class="artwork-piece">
+        <div class="art-bg art-3">
+          <div class="art-scene">
+            <svg viewBox="0 0 300 300" width="100%" fill="rgba(201,168,76,0.2)">
+              <rect x="0" y="220" width="300" height="80"/>
+              <!-- Trees -->
+              <rect x="30" y="150" width="10" height="70"/><ellipse cx="35" cy="135" rx="25" ry="35" fill="rgba(20,80,20,0.5)"/>
+              <rect x="80" y="160" width="10" height="60"/><ellipse cx="85" cy="145" rx="22" ry="30" fill="rgba(20,80,20,0.4)"/>
+              <rect x="200" y="155" width="10" height="65"/><ellipse cx="205" cy="140" rx="23" ry="32" fill="rgba(20,80,20,0.45)"/>
+              <!-- Bench and person -->
+              <rect x="120" y="195" width="60" height="5" fill="rgba(201,168,76,0.4)"/>
+              <rect x="125" y="200" width="5" height="20"/><rect x="170" y="200" width="5" height="20"/>
+              <ellipse cx="148" cy="185" rx="9" ry="10" fill="rgba(232,201,122,0.7)"/>
+              <rect x="141" y="195" width="14" height="15" fill="rgba(232,201,122,0.5)"/>
+            </svg>
+          </div>
+        </div>
+        <div class="artwork-overlay">
+          <h3>Central Park Morning</h3>
+          <p>Sitting on a bench in Central Park, coffee in hand, watching New York wake up around me.</p>
+        </div>
+        <div class="art-label">New York · Central Park</div>
+      </div>
+      <div class="artwork-piece">
+        <div class="art-bg art-4">
+          <div class="art-scene">
+            <svg viewBox="0 0 300 300" width="100%" fill="rgba(201,168,76,0.2)">
+              <rect x="0" y="240" width="300" height="60"/>
+              <!-- Golden Gate simplified -->
+              <rect x="80" y="120" width="15" height="120" fill="rgba(180,80,30,0.6)"/>
+              <rect x="205" y="120" width="15" height="120" fill="rgba(180,80,30,0.6)"/>
+              <line x1="0" y1="160" x2="88" y2="115" stroke="rgba(180,80,30,0.5)" stroke-width="4"/>
+              <line x1="88" y1="115" x2="150" y2="145" stroke="rgba(180,80,30,0.5)" stroke-width="4"/>
+              <line x1="150" y1="145" x2="213" y2="115" stroke="rgba(180,80,30,0.5)" stroke-width="4"/>
+              <line x1="213" y1="115" x2="300" y2="160" stroke="rgba(180,80,30,0.5)" stroke-width="4"/>
+              <!-- Person on bridge -->
+              <ellipse cx="150" cy="150" rx="8" ry="9" fill="rgba(232,201,122,0.9)"/>
+              <rect x="144" y="159" width="12" height="18" fill="rgba(232,201,122,0.7)"/>
+            </svg>
+          </div>
+        </div>
+        <div class="artwork-overlay">
+          <h3>Golden Gate Bridge Walk</h3>
+          <p>Crossing the iconic red bridge, fog swirling below, standing at the edge of the American continent.</p>
+        </div>
+        <div class="art-label">San Francisco · Golden Gate</div>
+      </div>
+      <div class="artwork-piece">
+        <div class="art-bg art-5">
+          <div class="art-scene">
+            <svg viewBox="0 0 300 300" width="100%" fill="rgba(201,168,76,0.2)">
+              <rect x="0" y="230" width="300" height="70"/>
+              <!-- Road -->
+              <polygon points="100,230 200,230 300,300 0,300" fill="rgba(30,30,50,0.6)"/>
+              <rect x="145" y="230" width="10" height="70" fill="rgba(201,168,76,0.3)"/>
+              <!-- Horizon buildings -->
+              <rect x="20" y="170" width="30" height="60"/><rect x="60" y="155" width="40" height="75"/>
+              <rect x="110" y="160" width="25" height="70"/><rect x="200" y="165" width="35" height="65"/>
+              <rect x="245" y="175" width="30" height="55"/>
+              <!-- Person walking -->
+              <ellipse cx="150" cy="215" rx="8" ry="9" fill="rgba(232,201,122,0.9)"/>
+              <rect x="144" y="224" width="12" height="16" fill="rgba(232,201,122,0.7)"/>
+            </svg>
+          </div>
+        </div>
+        <div class="artwork-overlay">
+          <h3>Walking into my American City</h3>
+          <p>The city lights ahead, the road beneath my feet, the whole country welcoming me home.</p>
+        </div>
+        <div class="art-label">America · My Arrival</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LUCID DREAMING NOTES -->
+  <section id="lucid">
+    <div class="section-label">Lucid Dreaming Notes</div>
+    <div class="section-title">Dreams where I was <em>fully conscious</em></div>
+    <div class="lucid-grid">
+      <div class="lucid-card">
+        <div class="lucid-num">01</div>
+        <div class="lucid-type">✦ Lucid Dream · Full Awareness</div>
+        <div class="lucid-title">I knew I was dreaming — and I stayed</div>
+        <div class="lucid-body">I was standing in Times Square and suddenly realised — this is a dream. Instead of waking, I chose to stay. I walked every block. I touched the walls of buildings. I looked up at the billboards and felt the city alive in my hands. I told myself: remember every detail. This is your future.</div>
+        <div class="lucid-meta">
+          <span class="lucid-tag">NYC</span>
+          <span class="lucid-tag">Full Lucidity</span>
+          <span class="lucid-tag">Vivid</span>
+        </div>
+      </div>
+      <div class="lucid-card">
+        <div class="lucid-num">02</div>
+        <div class="lucid-type">✦ Lucid Dream · Semi-Aware</div>
+        <div class="lucid-title">The airport dream — I landed</div>
+        <div class="lucid-body">The plane touched down and I watched the American landscape rush past the window. I could feel the wheels hit the runway. I knew somewhere deep inside this was a dream, but the emotions were completely real — excitement, relief, gratitude. I had arrived. I had actually done it.</div>
+        <div class="lucid-meta">
+          <span class="lucid-tag">Arrival</span>
+          <span class="lucid-tag">Emotional</span>
+          <span class="lucid-tag">Airport</span>
+        </div>
+      </div>
+      <div class="lucid-card">
+        <div class="lucid-num">03</div>
+        <div class="lucid-type">✦ Lucid Dream · Controlled</div>
+        <div class="lucid-title">I chose the city — I chose New York</div>
+        <div class="lucid-body">In this dream I could choose where to go. I said New York out loud and the scene shifted instantly. Manhattan materialized around me. I walked the High Line. I sat in a Brooklyn café. I watched the sunrise from a rooftop. Every detail felt designed by me — because it was. This is my vision becoming real.</div>
+        <div class="lucid-meta">
+          <span class="lucid-tag">Controlled</span>
+          <span class="lucid-tag">NYC</span>
+          <span class="lucid-tag">Brooklyn</span>
+        </div>
+      </div>
+      <div class="lucid-card">
+        <div class="lucid-num">04</div>
+        <div class="lucid-type">✦ Lucid Dream · Recurring</div>
+        <div class="lucid-title">The apartment — my American home</div>
+        <div class="lucid-body">I keep returning to the same apartment in my dreams. A small but beautiful place with a window overlooking city lights. A desk by the window. My things on the shelves. In this dream I live here. I have made it. I wake up from this dream and I think — I will find this place. It is waiting for me.</div>
+        <div class="lucid-meta">
+          <span class="lucid-tag">Recurring</span>
+          <span class="lucid-tag">Home</span>
+          <span class="lucid-tag">My Future</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIVATE JOURNAL -->
+  <section id="journal">
+    <div class="section-label">Private Journal</div>
+    <div class="section-title">My <em>innermost thoughts</em> on the journey</div>
+    <div class="journal-layout">
+      <div class="journal-sidebar">
+        <div class="journal-meta">
+          <div class="meta-item">
+            <span class="meta-label">This Journal</span>
+            <span class="meta-value">My American Dream Diary</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Destination</span>
+            <span class="meta-value">United States of America 🇺🇸</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Privacy</span>
+            <span class="meta-value">🔒 Password Protected</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Total Entries</span>
+            <span class="meta-value" id="entryCount">4 entries recorded</span>
+          </div>
+        </div>
+        <button class="add-btn" onclick="openModal()">+ Write a new entry</button>
+      </div>
+      <div class="journal-entries" id="journalEntries">
+        <div class="journal-entry">
+          <div class="entry-date">Entry 001 · The Beginning</div>
+          <div class="entry-title">The night I decided America was my destination</div>
+          <div class="entry-body">It was not a dramatic moment. No fireworks, no revelation. I simply sat down one evening and wrote in my notebook: I am going to America. And the moment I wrote it, it became real. It stopped being a wish and became a plan. That night changed everything.</div>
+        </div>
+        <div class="journal-entry">
+          <div class="entry-date">Entry 002 · On Longing</div>
+          <div class="entry-title">Why America? This is my honest answer.</div>
+          <div class="entry-body">People ask me why America specifically. I struggle to explain it fully. It is partly the culture, partly the opportunity, partly the scale of possibility. But mostly it is a feeling — that somewhere across that ocean there is a life that fits me perfectly. A city that will feel like home the moment I arrive. A community I have not met yet but already belong to.</div>
+        </div>
+        <div class="journal-entry">
+          <div class="entry-date">Entry 003 · The Hard Days</div>
+          <div class="entry-title">When the dream feels far away</div>
+          <div class="entry-body">Some days the dream feels impossibly distant. Visa processes, finances, logistics — the practical reality can be crushing. On those days I come back to this page. I read what I have written. I look at the city cards and the lucid dream notes. And I remember: the distance between a dream and reality is called work. And I am willing to do the work.</div>
+        </div>
+        <div class="journal-entry">
+          <div class="entry-date">Entry 004 · A Promise</div>
+          <div class="entry-title">A letter to my future self in America</div>
+          <div class="entry-body">Dear future me — you made it. You are reading this from somewhere in America. You kept your promise. You did not give up when it was hard. You did not let fear win. You are living the life that the person who built this website only dreamed about. I am proud of you. You deserve every single moment of this.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECURRING SYMBOLS -->
+  <section id="symbols">
+    <div class="section-label">Recurring Dream Symbols</div>
+    <div class="section-title">Signs from my <em>subconscious</em></div>
+    <div class="symbols-bg">
+      <div class="symbols-grid">
+        <div class="symbol-item">
+          <span class="symbol-icon">✈️</span>
+          <div class="symbol-name">The Airplane</div>
+          <div class="symbol-meaning">Transition. Crossing borders. My spirit preparing for flight. Freedom of movement across oceans.</div>
+        </div>
+        <div class="symbol-item">
+          <span class="symbol-icon">🗽</span>
+          <div class="symbol-name">Lady Liberty</div>
+          <div class="symbol-meaning">Welcome. New beginnings. The promise that this place was built for dreamers exactly like me.</div>
+        </div>
+        <div class="symbol-item">
+          <span class="symbol-icon">🌃</span>
+          <div class="symbol-name">City at Night</div>
+          <div class="symbol-meaning">Opportunity glowing from every window. A million lives being lived. My life among them soon.</div>
+        </div>
+        <div class="symbol-item">
+          <span class="symbol-icon">🛣️</span>
+          <div class="symbol-name">The Open Road</div>
+          <div class="symbol-meaning">The American highway stretching endlessly ahead. No limits. Pure possibility in every direction.</div>
+        </div>
+        <div class="symbol-item">
+          <span class="symbol-icon">🌅</span>
+          <div class="symbol-name">The New Dawn</div>
+          <div class="symbol-meaning">Every morning in my dream feels like the first morning of my American life. New and full of promise.</div>
+        </div>
+        <div class="symbol-item">
+          <span class="symbol-icon">🔑</span>
+          <div class="symbol-name">The Key</div>
+          <div class="symbol-meaning">The door to my American life already exists. I am forging the key through patience and persistence.</div>
+        </div>
+        <div class="symbol-item">
+          <span class="symbol-icon">🌉</span>
+          <div class="symbol-name">The Bridge</div>
+          <div class="symbol-meaning">Every bridge in my dreams is the gap between where I am and where I will be. I am crossing it.</div>
+        </div>
+        <div class="symbol-item">
+          <span class="symbol-icon">⭐</span>
+          <div class="symbol-name">The Stars & Stripes</div>
+          <div class="symbol-meaning">My name written in the American sky. I see the flag and feel belonging before I have even arrived.</div>
+        </div>
+        <div class="symbol-item">
+          <span class="symbol-icon">🏙️</span>
+          <div class="symbol-name">The Skyline</div>
+          <div class="symbol-meaning">Buildings reaching toward heaven. Human ambition made visible. This is the world I am joining.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GOALS CHECKLIST -->
+  <section id="goals">
+    <div class="section-label">My Goals</div>
+    <div class="section-title">Steps I'm taking <em>right now</em></div>
+    <div class="goals-grid" id="goalsGrid">
+      <div class="goal-item" onclick="toggleGoal(this)">
+        <div class="goal-check"></div>
+        <div class="goal-text">
+          <h4>Research visa requirements</h4>
+          <p>Understand the exact visa pathway — student, work, or other. Know every document needed.</p>
+        </div>
+      </div>
+      <div class="goal-item" onclick="toggleGoal(this)">
+        <div class="goal-check"></div>
+        <div class="goal-text">
+          <h4>Build my savings fund</h4>
+          <p>Every rupee saved is a step closer. Set a monthly target and hit it without fail.</p>
+        </div>
+      </div>
+      <div class="goal-item" onclick="toggleGoal(this)">
+        <div class="goal-check"></div>
+        <div class="goal-text">
+          <h4>Improve my English fluency</h4>
+          <p>Read, write, speak, listen. English is the key that unlocks every American door.</p>
+        </div>
+      </div>
+      <div class="goal-item" onclick="toggleGoal(this)">
+        <div class="goal-check"></div>
+        <div class="goal-text">
+          <h4>Get my passport ready</h4>
+          <p>A valid passport is the first physical document of the journey. Get it sorted.</p>
+        </div>
+      </div>
+      <div class="goal-item" onclick="toggleGoal(this)">
+        <div class="goal-check"></div>
+        <div class="goal-text">
+          <h4>Research American cities</h4>
+          <p>Study each city — cost of living, culture, job markets, neighbourhoods. Pick my destination.</p>
+        </div>
+      </div>
+      <div class="goal-item" onclick="toggleGoal(this)">
+        <div class="goal-check"></div>
+        <div class="goal-text">
+          <h4>Build a skill set that travels</h4>
+          <p>Develop skills that have value in the American job market. Make myself undeniably hireable.</p>
+        </div>
+      </div>
+      <div class="goal-item" onclick="toggleGoal(this)">
+        <div class="goal-check"></div>
+        <div class="goal-text">
+          <h4>Connect with the diaspora community</h4>
+          <p>Find Indian and Tamil communities in America. Build my network before I even arrive.</p>
+        </div>
+      </div>
+      <div class="goal-item" onclick="toggleGoal(this)">
+        <div class="goal-check"></div>
+        <div class="goal-text">
+          <h4>Book my first flight</h4>
+          <p>The ultimate goal. The moment I hit confirm on that ticket — everything changes forever.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISION BOARD -->
+  <section id="vision">
+    <div class="section-label">Vision Board</div>
+    <div class="section-title">My <em>American life</em> visualized</div>
+    <div class="vision-mosaic">
+      <div class="vision-block vb-1">
+        <div class="vision-bg">🏙️</div>
+        <div class="vision-caption"><strong>My City Life</strong>Building my life in an American metropolis — waking up to city sounds every morning</div>
+      </div>
+      <div class="vision-block vb-2">
+        <div class="vision-bg">☕</div>
+        <div class="vision-caption"><strong>Morning Coffee</strong>A quiet café in Brooklyn or the Loop, starting my American day</div>
+      </div>
+      <div class="vision-block vb-3">
+        <div class="vision-bg">🌿</div>
+        <div class="vision-caption"><strong>Central Park Walks</strong>Finding my peace in the green heart of New York City</div>
+      </div>
+      <div class="vision-block vb-4">
+        <div class="vision-bg">🎓</div>
+        <div class="vision-caption"><strong>Growth & Success</strong>Becoming the version of myself that was always possible</div>
+      </div>
+      <div class="vision-block vb-5">
+        <div class="vision-bg">🌉</div>
+        <div class="vision-caption"><strong>Bridge Crossings</strong>Golden Gate. Brooklyn Bridge. Every bridge is a metaphor I intend to live.</div>
+      </div>
+      <div class="vision-block vb-6">
+        <div class="vision-bg">🎵</div>
+        <div class="vision-caption"><strong>Live Music Nights</strong>Jazz in New Orleans. Blues in Chicago. Rock in Austin.</div>
+      </div>
+      <div class="vision-block vb-7">
+        <div class="vision-bg">🍕</div>
+        <div class="vision-caption"><strong>Real American Food</strong>Deep dish Chicago pizza. New York slice at 2am. Texas BBQ on a Sunday.</div>
+      </div>
+      <div class="vision-block vb-8">
+        <div class="vision-bg">🌟</div>
+        <div class="vision-caption"><strong>The Moment I Make It</strong>Standing on American soil knowing I did exactly what I said I would do.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COUNTDOWN TIMER -->
+  <section id="countdown" style="padding-bottom:2rem">
+    <div class="section-label">Countdown</div>
+    <div class="section-title">Time until <em>my arrival</em></div>
+    <div class="countdown-wrap">
+      <div class="countdown-title">Setting my sights on the day I land in America 🇺🇸</div>
+      <div class="countdown-boxes">
+        <div class="countdown-box"><div class="countdown-num" id="cdDays">000</div><div class="countdown-label">Days</div></div>
+        <div class="countdown-sep">:</div>
+        <div class="countdown-box"><div class="countdown-num" id="cdHours">00</div><div class="countdown-label">Hours</div></div>
+        <div class="countdown-sep">:</div>
+        <div class="countdown-box"><div class="countdown-num" id="cdMins">00</div><div class="countdown-label">Minutes</div></div>
+        <div class="countdown-sep">:</div>
+        <div class="countdown-box"><div class="countdown-num" id="cdSecs">00</div><div class="countdown-label">Seconds</div></div>
+      </div>
+      <div class="countdown-sub">Every second brings me closer. The clock is ticking in my favour.</div>
+      <div class="countdown-input-wrap">
+        <label>Set your target date:</label>
+        <input type="date" class="countdown-date-input" id="targetDate">
+        <button class="set-date-btn" onclick="setCountdownDate()">SET DATE</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="gold-divider"></div>
+
+  <footer>
+    <div class="footer-title">MY AMERICA ✦</div>
+    <div class="footer-sub">A private sanctuary for dreams that will one day be memories</div>
+    <div class="footer-lock">🔒 Password Protected · Private · No Tracking · Yours Only · Chennai → USA</div>
+  </footer>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title">Write a Dream Entry</div>
+    <div class="modal-field">
+      <label class="modal-label">Entry Title</label>
+      <input type="text" class="modal-input" id="entryTitle" placeholder="What did you dream or think about?">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Your Thoughts</label>
+      <textarea class="modal-textarea" id="entryText" placeholder="Write freely — this is your private space..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveEntry()">SAVE ENTRY</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ====== LOGIN DISABLED ======
+  // Credentials no longer required; site is public
+  const USERNAME = "";
+  const PASSWORD = "";
+
+  function unlock() {
+    // login disabled – just show main content
+    const main = document.getElementById('mainSite');
+    main.style.display = 'block';
+    setTimeout(() => main.style.opacity = '1', 10);
+  }
+
+  function lockSite() {
+    document.getElementById('mainSite').style.opacity = '0';
+    setTimeout(() => {
+      document.getElementById('mainSite').style.display = 'none';
+      document.getElementById('lockScreen').style.display = 'flex';
+      document.getElementById('lockScreen').style.animation = 'fadeIn 0.8s ease';
+      document.getElementById('lockScreen').style.pointerEvents = 'all';
+      document.getElementById('passwordInput').value = '';
+    }, 500);
+  }
+
+  // GOALS
+  function toggleGoal(el) {
+    el.classList.toggle('done');
+    const done = document.querySelectorAll('.goal-item.done').length;
+    const total = document.querySelectorAll('.goal-item').length;
+    showNotif(`✦ ${done} of ${total} goals completed`);
+  }
+
+  // JOURNAL
+  let entryCount = 4;
+  function openModal() {
+    document.getElementById('modal').classList.add('open');
+    document.getElementById('entryTitle').focus();
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    document.getElementById('entryTitle').value = '';
+    document.getElementById('entryText').value = '';
+  }
+  function saveEntry() {
+    const title = document.getElementById('entryTitle').value.trim();
+    const text = document.getElementById('entryText').value.trim();
+    if (!title || !text) return;
+    entryCount++;
+    const container = document.getElementById('journalEntries');
+    const el = document.createElement('div');
+    el.className = 'journal-entry';
+    el.innerHTML = `
+      <div class="entry-date">Entry ${String(entryCount).padStart(3,'0')} · Just Now</div>
+      <div class="entry-title">${title}</div>
+      <div class="entry-body">${text}</div>
+    `;
+    container.appendChild(el);
+    document.getElementById('entryCount').textContent = `${entryCount} entries recorded`;
+    document.getElementById('dreamCountStat').textContent = entryCount;
+    closeModal();
+    showNotif('✦ Dream entry saved to your private journal');
+  }
+
+  // COUNTDOWN
+  let targetTimestamp = null;
+  function setCountdownDate() {
+    const val = document.getElementById('targetDate').value;
+    if (!val) return;
+    targetTimestamp = new Date(val).getTime();
+    showNotif('✦ Countdown set — every second counts!');
+  }
+  function updateCountdown() {
+    if (!targetTimestamp) {
+      // Default: show time since page load just to animate
+      const now = Date.now();
+      const diff = targetTimestamp ? targetTimestamp - now : 365 * 24 * 3600 * 1000;
+      return;
+    }
+    const now = Date.now();
+    let diff = targetTimestamp - now;
+    if (diff < 0) {
+      document.getElementById('cdDays').textContent = '000';
+      document.getElementById('cdHours').textContent = '00';
+      document.getElementById('cdMins').textContent = '00';
+      document.getElementById('cdSecs').textContent = '00';
+      return;
+    }
+    const days = Math.floor(diff / (1000*60*60*24));
+    diff -= days * 1000*60*60*24;
+    const hours = Math.floor(diff / (1000*60*60));
+    diff -= hours * 1000*60*60;
+    const mins = Math.floor(diff / (1000*60));
+    diff -= mins * 1000*60;
+    const secs = Math.floor(diff / 1000);
+    document.getElementById('cdDays').textContent = String(days).padStart(3,'0');
+    document.getElementById('cdHours').textContent = String(hours).padStart(2,'0');
+    document.getElementById('cdMins').textContent = String(mins).padStart(2,'0');
+    document.getElementById('cdSecs').textContent = String(secs).padStart(2,'0');
+  }
+  setInterval(updateCountdown, 1000);
+
+  // NOTIFICATION
+  function showNotif(msg) {
+    const n = document.getElementById('notif');
+    n.textContent = msg;
+    n.classList.add('show');
+    setTimeout(() => n.classList.remove('show'), 3000);
+  }
+
+  // SMOOTH SCROLL
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior:'smooth' });
+    });
+  });
+
+  // MODAL CLOSE ON OVERLAY CLICK
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // FADEOUT KEYFRAME
+  const s = document.createElement('style');
+  s.textContent = '@keyframes fadeOut{from{opacity:1}to{opacity:0}}';
+  document.head.appendChild(s);
+</script>
+</body>
+</html>
