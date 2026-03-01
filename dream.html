@@ -20,9 +20,11 @@
   body { font-family: 'Cormorant Garamond', serif; background: var(--dark); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
   /* LOCK SCREEN */
-  /* password protection removed - lock screen hidden */
   #lockScreen {
-    display: none !important;
+    position: fixed; inset: 0; z-index: 1000;
+    background: var(--dark);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    animation: fadeIn 1s ease;
   }
   .lock-bg {
     position: absolute; inset: 0;
@@ -954,16 +956,33 @@
 </div>
 
 <script>
-  // ====== LOGIN DISABLED ======
-  // Credentials no longer required; site is public
-  const USERNAME = "";
-  const PASSWORD = "";
+  // ====== SET LOGIN CREDENTIALS HERE ======
+  const USERNAME = "Anish.T";
+  const PASSWORD = "2007";
 
   function unlock() {
-    // login disabled – just show main content
-    const main = document.getElementById('mainSite');
-    main.style.display = 'block';
-    setTimeout(() => main.style.opacity = '1', 10);
+    const userInput = document.getElementById('usernameInput').value.trim();
+    const passInput = document.getElementById('passwordInput').value.trim();
+    const error = document.getElementById('lockError');
+    if (userInput === USERNAME && passInput === PASSWORD) {
+      document.getElementById('lockScreen').style.animation = 'fadeOut 0.8s ease forwards';
+      document.getElementById('lockScreen').style.pointerEvents = 'none';
+      setTimeout(() => {
+        document.getElementById('lockScreen').style.display = 'none';
+        const main = document.getElementById('mainSite');
+        main.style.display = 'block';
+        setTimeout(() => main.style.opacity = '1', 10);
+      }, 800);
+    } else {
+      error.classList.add('show');
+      document.getElementById('usernameInput').style.borderColor = '#e06060';
+      document.getElementById('passwordInput').style.borderColor = '#e06060';
+      setTimeout(() => {
+        error.classList.remove('show');
+        document.getElementById('usernameInput').style.borderColor = '';
+        document.getElementById('passwordInput').style.borderColor = '';
+      }, 2500);
+    }
   }
 
   function lockSite() {
@@ -1080,5 +1099,38 @@
   s.textContent = '@keyframes fadeOut{from{opacity:1}to{opacity:0}}';
   document.head.appendChild(s);
 </script>
-</body>
-</html>
+<body>
+<h1 style="color: var(--gold); text-align:center; margin-top:1rem;">ANISH&gt;T</h1>
+<!-- LOCK SCREEN -->
+<div id="lockScreen">
+  <div class="lock-bg"></div>
+  <div class="city-skyline">
+    <svg viewBox="0 0 1400 300" preserveAspectRatio="xMidYMax slice" fill="rgba(201,168,76,0.6)">
+      <rect x="0" y="150" width="1400" height="150"/>
+      <rect x="50" y="120" width="40" height="180"/><rect x="100" y="90" width="60" height="210"/>
+      <rect x="170" y="110" width="30" height="190"/><rect x="210" y="70" width="50" height="230"/>
+      <rect x="220" y="50" width="15" height="250"/><rect x="270" y="100" width="40" height="200"/>
+      <rect x="320" y="80" width="70" height="220"/><rect x="400" y="130" width="35" height="170"/>
+      <rect x="445" y="95" width="55" height="205"/><rect x="510" y="60" width="80" height="240"/>
+      <rect x="544" y="40" width="12" height="260"/><rect x="600" y="110" width="45" height="190"/>
+      <rect x="655" y="75" width="60" height="225"/><rect x="725" y="100" width="50" height="200"/>
+      <rect x="785" y="65" width="65" height="235"/><rect x="860" y="90" width="40" height="210"/>
+      <rect x="910" y="115" width="55" height="185"/><rect x="975" y="80" width="70" height="220"/>
+      <rect x="1055" y="100" width="45" height="200"/><rect x="1110" y="70" width="60" height="230"/>
+      <rect x="1180" y="95" width="35" height="205"/><rect x="1225" y="120" width="50" height="180"/>
+      <rect x="1285" y="85" width="65" height="215"/><rect x="1360" y="130" width="40" height="170"/>
+    </svg>
+  </div>
+  <div class="lock-content">
+    <span class="lock-icon">🗽</span>
+    <div class="lock-title">MY AMERICA</div>
+    <div class="lock-subtitle">A private world of dreams &amp; aspirations</div>
+    <input type="text" class="lock-input" id="usernameInput" placeholder="Username (e.g. Anish.T)" onkeydown="if(event.key==='Enter') unlock()">
+    <input type="password" class="lock-input" id="passwordInput" placeholder="Password" onkeydown="if(event.key==='Enter') unlock()">
+    <button class="lock-btn" onclick="unlock()">ENTER MY WORLD</button>
+    <div class="lock-error" id="lockError">Incorrect credentials. Try again.</div>
+    <div class="lock-hint">🔒 This site is private &amp; password protected</div>
+  </div>
+</div>
+
+<div class="notif" id="notif">✦ Saved to your private journal</div>
